@@ -1,163 +1,42 @@
-# ⚽ Futbol Wordle
+# Overview
 
-A **Wordle-style game** about football players, played in the terminal. Written in Java as a beginner project (This is made for ball knowledge guys).
+As a software engineer, I wanted to strengthen my understanding of core Java concepts by building a complete program from start to finish, instead of only practicing isolated exercises. This project helped me practice designing classes, organizing data in collections, and working with files, which are skills I will use in any larger application.
 
-Guess the secret player (5 letters, usually the surname) in **6 attempts**.
+**Futbol Wordle** is a terminal game based on Wordle, but about football players. The program loads a list of 100 famous players (current and past) from a text file, picks one at random, and the user has 6 attempts to guess the 5-letter name. After each guess, every letter is colored: green if it is in the right place, yellow if it is in the name but in another place, and gray if it is not in the name. At the end of each round, the game saves the result to a file and shows the user's record (wins and games played) the next time it starts.
 
----
+The whole program is written in a single Java file, `FutbolWordle.java`, with three classes: `Player`, `Game` and `FutbolWordle`. It also uses two text files: `players.txt` (read) and `scores.txt` (written).
 
-## 📋 Table of Contents
+My purpose for writing this software was to practice the Java language syntax in a real project: variables, expressions, conditionals, loops, methods, classes and objects, the `ArrayList` collection, and reading and writing files. It also helped me learn how to separate responsibilities between classes (a player, a game round, and the user interface) and how to handle repeated letters correctly in the color logic.
 
-- [How to Play](#-how-to-play)
-- [Requirements](#-requirements)
-- [Installation and Run](#-installation-and-run)
-- [Example](#-example)
-- [Project Structure](#-project-structure)
-- [How the Code Works](#-how-the-code-works)
-- [Files the Game Uses](#-files-the-game-uses)
+[Software Demo Video](https://www.youtube.com/watch?v=IULgMPLCbdg&feature=youtu.be)
 
----
+# Development Environment
 
-## 🎮 How to Play
+- Java JDK 8 or higher (compiled with `javac` and run with `java` from the terminal)
+- A code editor or IDE of my choice (replace with the one you used, for example VS Code or IntelliJ IDEA)
+- Git and GitHub for version control
+- A terminal that supports ANSI colors (Windows Terminal, VS Code, IntelliJ, Linux or Mac terminal)
 
-1. The game loads a list of **100 famous players** (current and past) from `players.txt` and picks one at random.
-2. Type a guess of exactly **5 letters** (A-Z, no accents) and press Enter.
-3. Each letter gets a color:
+The program is written in **Java**. It uses only the standard library, with no external libraries:
 
-| Color | Meaning |
-|-------|---------|
-| 🟩 Green | Right letter, right place |
-| 🟨 Yellow | The letter is in the name, but in another place |
-| ⬛ Gray | The letter is not in the name |
+- `java.util.ArrayList` to store the players
+- `java.util.Scanner` to read the user's input
+- `java.util.Random` to pick a random player
+- `java.io.BufferedReader`, `FileReader`, `FileWriter` and `PrintWriter` to read and write files
+- `java.io.File` to check if a file exists
+- `java.time.LocalDate` to save the date of each game
 
-4. You have **6 attempts**. Guess the name before they run out!
-5. Your result is saved in `scores.txt`, and the game shows your record the next time you start it.
+# Useful Websites
 
-> **Note:** An invalid guess (wrong length or symbols) does **not** use up an attempt.
+- [Oracle Java Tutorials](https://docs.oracle.com/javase/tutorial/)
+- [W3Schools Java Tutorial](https://www.w3schools.com/java/)
+- [Baeldung: Write to a File in Java](https://www.baeldung.com/java-write-to-file)
+- [Markdown Cheat Sheet](https://www.markdownguide.org/cheat-sheet/)
 
-Type `exit` at any time to quit.
+# Future Work
 
----
-
-## 🧰 Requirements
-
-- Java JDK 8 or higher
-- A terminal that supports ANSI colors (IntelliJ, VS Code, Windows Terminal, Linux or Mac terminal)
-
-To check your Java version:
-
-```bash
-java -version
-```
-
----
-
-## 🚀 Installation and Run
-
-1. Clone the repository (or download the files):
-
-```bash
-git clone https://github.com/your-username/futbol-wordle.git
-cd futbol-wordle
-```
-
-2. Compile:
-
-```bash
-javac FutbolWordle.java
-```
-
-3. Run (from the same folder where `players.txt` is):
-
-```bash
-java FutbolWordle
-```
-
----
-
-## 🖥️ Example
-
-```text
-=====================================
-        FUTBOL WORDLE  (100 players)
-=====================================
-Guess the football player in 6 tries (5 letters).
-Type 'exit' to quit.
-Your record: 3 wins in 4 games.
-
-Attempt 1/6: salah
-             S  A  L  A  H
-Attempt 2/6: henry
-             H  E  N  R  Y
-
-GOAL! You got it in 2 tries: HENRY
-```
-
-*(In the real game each letter has a green, yellow or gray background.)*
-
----
-
-## 📁 Project Structure
-
-```text
-futbol-wordle/
-├── FutbolWordle.java   # The whole game (3 classes)
-├── players.txt         # The 100 players, one per line
-├── scores.txt          # Created automatically after your first game
-└── README.md           # This file
-```
-
----
-
-## 🧠 How the Code Works
-
-The code is in one file with **three classes**:
-
-| Class | What it does |
-|-------|--------------|
-| `Player` | Represents one football player (stores the name, `getName()`) |
-| `Game` | Represents one round: the secret player, the attempts, the validation and the color logic (`checkGuess`) |
-| `FutbolWordle` | The main class: starts the program, talks to the user and reads/writes the files |
-
-Main methods in `FutbolWordle`:
-
-| Method | What it does |
-|--------|--------------|
-| `main` | Loads the players, picks a random one and repeats rounds while the user wants to play |
-| `playRound` | Reads the guesses and validates them until the game is over |
-| `printResult` | Prints the colored letters using ANSI codes |
-| `loadPlayers` | **Reads** `players.txt` into an `ArrayList<Player>` |
-| `saveScore` | **Writes** the result of each game to `scores.txt` |
-| `showStats` | **Reads** `scores.txt` and shows wins and games played |
-
-`Game.checkGuess` works in **two passes** so repeated letters are handled correctly:
-
-1. First pass marks the **green** letters (exact matches)
-2. Second pass marks the **yellow** letters (right letter, wrong place) without reusing a letter that was already matched
-
----
-
-## 💾 Files the Game Uses
-
-**`players.txt`** (read): one 5-letter name per line.
-
-```text
-MESSI
-HENRY
-PIRLO
-```
-
-**`scores.txt`** (written): one line per game, in the format `date,PLAYER,WON/LOST,attempts`.
-
-```text
-2026-11-14,HENRY,WON,2
-2026-11-14,KROOS,LOST,6
-```
-
----
-
-## 👤 Author
-
-Made by **Shared Lopez Serrano** — [GitHub](https://github.com/sharedlopezserrano)
-Video (https://www.youtube.com/watch?v=IULgMPLCbdg&feature=youtu.be)
-
+- Show a hint after a few failed attempts (nationality or club)
+- Add a winning streak counter
+- Show a keyboard with the letters already used
+- Add difficulty levels (more or fewer attempts)
+- Add an interface or inheritance to support different game modes
